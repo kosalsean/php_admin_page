@@ -32,5 +32,5 @@
     echo json_encode($status); // ! return value of $status as json data to another file
         
  }    
-// error_reporting(0);
+//  error_reporting(0);
 ?>
