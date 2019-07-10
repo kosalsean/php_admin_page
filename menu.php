@@ -33,7 +33,7 @@
     <body>
         <div class="box">
             <form class="upl">
-                <input type="text" name="txt-edit-id" value="0" id="txt-edit-id">
+                <input type="hidden" name="txt-edit-id" value="0" id="txt-edit-id">
                 <label for="txt-id">ID</label>
                 <input class="input-cntr" type="text" name="txt-id" id="txt-id" value="<?php echo $lastID;  ?>"
                     readonly>
@@ -76,7 +76,7 @@
                 <td><?php echo $row[2];  ?></td>
                 <td class="img-row ">
                     <img class="row-img" src="<?php echo $row[3]; ?>" alt="image">
-                    <input type="text" class="img-name" value="<?php  echo $row[3]  ?>">
+                    <!-- <input type="text" class="img-name" value="<?php  echo $row[3]  ?>"> -->
                 </td>
                 <td>
                     <div class="btn-edit">Edit</div>

@@ -27,7 +27,7 @@
     }else{
         $sql = "UPDATE tbl_menu SET name = '".$name."', color = '".$color."',img ='".$photo."' WHERE id =".$edit_id."";
         $connecton->query($sql);
-        $status['last_id'] = 'edit';
+        $status['update'] = 'edit';
     }
     echo json_encode($status); // ! return value of $status as json data to another file
         

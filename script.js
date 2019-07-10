@@ -5,8 +5,8 @@ $(function () {
     var color = $("#txt-color");
     var ind;
     var photo_path = $('#img-name');
+    var lastID;
     $('#txt-file').change(function () {
-        // alert('hi');
         var eThis = $(this);
         var form = $(this).closest('form.upl');
         var form_data = new FormData(form[0]);
@@ -21,7 +21,6 @@ $(function () {
             processData: false,
             success: function (data) {
                 $('#img-name').val(data.source);
-                // alert(data.source);
                 var img_name = data.source;
                 $('.img-box').css({
                     'background-image': 'url("' + img_name + '")'
@@ -34,8 +33,8 @@ $(function () {
     $('#btn-post').click(function () {
         var input = '<input type="text" class="img-name" value="' + $('#img-name').val() + '">';
         var eThis = $(this);
-        if (name.val() == "") {
-            alert('Insert name');
+        if (name.val() == "" || $('#img-name').val() == '') {
+            alert('Please check name and photo');
             name.focus();
             return;
         }
@@ -61,29 +60,36 @@ $(function () {
                 });
             },
             success: function (data) {
-                if (data.dpl == true) {
+                if (data.update == 'edit') {
+                    //  !  =================
+                    tblResult.find('tr:eq(' + ind + ') td:eq(1)').text(name.val());
+                    tblResult.find('tr:eq(' + ind + ') td:eq(2)').text(color.val());
+                    tblResult.find('tr:eq(' + ind + ') td:eq(3) img').attr('src', photo_path.val());
+                    $('#txt-edit-id').val(0);
+                    $('#img-name').val('');
+                    name.val('');
+                    name.focus();
+                    id.val(lastID);
+
+                } else if (data.dpl == true) {
                     alert("Name is duplicated!");
                     name.focus();
                 } else if (data.insert == false) {
                     alert("Data can't save!");
                 } else {
-                    if (data.last_id == 'edit') {
-                        alert('edit');
-                    } else {
-                        var btn_edit = '<div class="btn-edit">Edit</div>'
-                        var img = '<img class="row-img" src="' + $('#img-name').val() + '">';
-                        var tr = '<tr class="alternate-row"><td>' + data.last_id + '</td><td>' + name.val() + '</td><td>' + color.val() + '</td> <td>' + img + input + '</td> <td> ' + btn_edit + ' </td></tr>';
-                        tblResult.append(tr);
-                        name.val('');
-                        name.focus();
-                        id.val(data.last_id + 1);
-                        $('.img-box').css({
-                            'background-image': 'url("images.png")'
-                        });
-                        $('#img-name').val('');
-
-                    }
-                };
+                    var btn_edit = '<div class="btn-edit">Edit</div>'
+                    var img = '<img class="row-img" src="' + $('#img-name').val() + '">';
+                    var tr = '<tr class="alternate-row"><td>' + data.last_id + '</td><td>' + name.val() + '</td><td>' + color.val() + '</td> <td>' + img + '</td> <td> ' + btn_edit + ' </td></tr>';
+                    tblResult.append(tr);
+                    name.val('');
+                    name.focus();
+                    id.val(data.last_id + 1);
+                    lastID = data.last_id + 1;
+                    $('.img-box').css({
+                        'background-image': 'url("images.png")'
+                    });
+                    $('#img-name').val('');
+                }
                 eThis.html("POST");
                 eThis.css({
                     'pointer-events': 'auto',
@@ -91,6 +97,10 @@ $(function () {
                     'padding': '5px',
                     'height': '20px',
                 });
+                $('.img-box').css({
+                    'background-image': 'url("images.png")'
+                });
+                // id.val();
             }
         });
     });
@@ -101,7 +111,7 @@ $(function () {
         let id2 = tr.find('td:eq(0)').text();
         let name2 = tr.find('td:eq(1)').text();
         let color2 = tr.find('td:eq(2)').text();
-        let img2 = tr.find('td:eq(3) img').attr('src', photo_path.val());
+        let img2 = tr.find('td:eq(3) img').attr('src');
         id.val(id2);
         name.val(name2);
         color.val(color2);
@@ -110,7 +120,6 @@ $(function () {
         });
         $('#txt-edit-id').val(id2);
         ind = tr.index();
-        alert(ind);
     });
     //!------------------------------------- wrong 
     // $('.btn-edit').click(function () {
